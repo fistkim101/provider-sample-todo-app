@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
 class SearchTermState extends Equatable {
-  final String searchTerm;
+  final String? searchTerm;
 
   const SearchTermState({
     required this.searchTerm,
@@ -12,7 +12,7 @@ class SearchTermState extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [searchTerm];
+  List<Object> get props => [searchTerm ?? ''];
 
   SearchTermState copyWith(String searchTerm) {
     return SearchTermState(searchTerm: searchTerm);
@@ -21,12 +21,12 @@ class SearchTermState extends Equatable {
 
 class SearchTerm with ChangeNotifier {
   late SearchTermState _state;
-  final String initialSearchTerm;
+  final String? initialSearchTerm;
 
   SearchTermState get state => _state;
 
   SearchTerm({
-    required this.initialSearchTerm,
+    this.initialSearchTerm,
   }) {
     _state = SearchTermState(searchTerm: initialSearchTerm);
   }

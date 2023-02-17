@@ -7,6 +7,7 @@ import '../providers/providers.dart';
 
 class FilteredTodoState extends Equatable {
   final List<Todo> filteredTodos;
+
   const FilteredTodoState({
     required this.filteredTodos,
   });
@@ -22,20 +23,23 @@ class FilteredTodoState extends Equatable {
   }
 }
 
-class FilteredTodo with ChangeNotifier {
+class FilteredTodos with ChangeNotifier {
   late FilteredTodoState _state;
   final List<Todo> filteredTodos;
 
-  FilteredTodo({
+  FilteredTodoState get state => _state;
+
+  FilteredTodos({
     required this.filteredTodos,
   }) {
     _state = FilteredTodoState(filteredTodos: filteredTodos);
   }
 
-  void update(Todos todos, Filter filter) {
+  void update(Todos todos, Filter filter, SearchTerm searchTerm) {
     final FilterType selectedFilterType = filter.state.filterType;
     List<Todo> currentAllTodos = todos.state.todos;
     List<Todo> filteredTodos = [];
+    String? currentSearchTerm = searchTerm.state.searchTerm;
 
     if (selectedFilterType == FilterType.all) {
       filteredTodos = currentAllTodos;
@@ -49,6 +53,12 @@ class FilteredTodo with ChangeNotifier {
     if (selectedFilterType == FilterType.active) {
       filteredTodos =
           currentAllTodos.where((todo) => !todo.isCompleted).toList();
+    }
+
+    if (currentSearchTerm != null && currentSearchTerm.isNotEmpty) {
+      filteredTodos = filteredTodos
+          .where((todo) => todo.description.contains(currentSearchTerm))
+          .toList();
     }
 
     _state = _state.copyWith(filteredTodos);
