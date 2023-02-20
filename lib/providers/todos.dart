@@ -45,8 +45,8 @@ class Todos with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeTodo(Todo todo) {
-    _state.todos.removeWhere((todo) => todo.id == todo.id);
+  void removeTodo(String removeTargetTodoId) {
+    _state.todos.removeWhere((todo) => todo.id == removeTargetTodoId);
     _state = _state.copyWith([..._state.todos]);
     notifyListeners();
   }
