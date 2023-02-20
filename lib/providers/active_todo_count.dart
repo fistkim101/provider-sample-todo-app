@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 
 import '../providers/providers.dart';
 
@@ -9,10 +8,6 @@ class ActiveTodoCountState extends Equatable {
   const ActiveTodoCountState({
     required this.activeTodoCount,
   });
-
-  // factory ActiveTodoCountState.initial() {
-  //   return const ActiveTodoCountState(activeTodoCount: 0);
-  // }
 
   @override
   List<Object> get props {
@@ -27,22 +22,17 @@ class ActiveTodoCountState extends Equatable {
   }
 }
 
-class ActiveTodoCount with ChangeNotifier {
-  late ActiveTodoCountState _state;
-  final int initialActiveTodoCount;
-
-  ActiveTodoCountState get state => _state;
+class ActiveTodoCount {
+  final Todos todos;
 
   ActiveTodoCount({
-    required this.initialActiveTodoCount,
-  }) {
-    _state = ActiveTodoCountState(activeTodoCount: initialActiveTodoCount);
-  }
+    required this.todos,
+  });
 
-  void update(Todos todos) {
+  ActiveTodoCountState get state {
     final int newActiveTodoCount =
         todos.state.todos.where((todo) => !todo.isCompleted).toList().length;
-    _state = _state.copyWith(newActiveTodoCount);
-    notifyListeners();
+
+    return ActiveTodoCountState(activeTodoCount: newActiveTodoCount);
   }
 }

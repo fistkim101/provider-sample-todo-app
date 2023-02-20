@@ -25,29 +25,24 @@ class TodoApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => Todos(initialTodos: []),
         ),
-        ChangeNotifierProxyProvider<Todos, ActiveTodoCount>(
-          create: (_) => ActiveTodoCount(
-            initialActiveTodoCount: 0,
-          ),
+        ProxyProvider<Todos, ActiveTodoCount>(
           update: (
             _,
             Todos todos,
-            ActiveTodoCount? activeTodoCount,
+            __,
           ) =>
-              activeTodoCount!..update(todos),
+              ActiveTodoCount(todos: todos),
         ),
-        ChangeNotifierProxyProvider3<Todos, Filter, SearchTerm, FilteredTodos>(
-          create: (_) => FilteredTodos(
-            filteredTodos: [],
-          ),
+        ProxyProvider3<Todos, Filter, SearchTerm, FilteredTodos>(
           update: (
             _,
             Todos todos,
             Filter filter,
             SearchTerm searchTerm,
-            FilteredTodos? filteredTodos,
+            __,
           ) =>
-              filteredTodos!..update(todos, filter, searchTerm),
+              FilteredTodos(
+                  todos: todos, filter: filter, searchTerm: searchTerm),
         )
       ],
       child: const MaterialApp(

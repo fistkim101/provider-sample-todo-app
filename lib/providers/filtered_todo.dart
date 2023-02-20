@@ -1,14 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 
 import '../enums/enums.dart';
 import '../models/model.dart';
 import '../providers/providers.dart';
 
-class FilteredTodoState extends Equatable {
+class FilteredTodosState extends Equatable {
   final List<Todo> filteredTodos;
 
-  const FilteredTodoState({
+  const FilteredTodosState({
     required this.filteredTodos,
   });
 
@@ -18,24 +17,23 @@ class FilteredTodoState extends Equatable {
   @override
   List<Object> get props => [filteredTodos];
 
-  FilteredTodoState copyWith(List<Todo> filteredTodos) {
-    return FilteredTodoState(filteredTodos: filteredTodos);
+  FilteredTodosState copyWith(List<Todo> filteredTodos) {
+    return FilteredTodosState(filteredTodos: filteredTodos);
   }
 }
 
-class FilteredTodos with ChangeNotifier {
-  late FilteredTodoState _state;
-  final List<Todo> filteredTodos;
-
-  FilteredTodoState get state => _state;
+class FilteredTodos {
+  final Todos todos;
+  final Filter filter;
+  final SearchTerm searchTerm;
 
   FilteredTodos({
-    required this.filteredTodos,
-  }) {
-    _state = FilteredTodoState(filteredTodos: filteredTodos);
-  }
+    required this.todos,
+    required this.filter,
+    required this.searchTerm,
+  });
 
-  void update(Todos todos, Filter filter, SearchTerm searchTerm) {
+  FilteredTodosState get state {
     final FilterType selectedFilterType = filter.state.filterType;
     List<Todo> currentAllTodos = todos.state.todos;
     List<Todo> filteredTodos = [];
@@ -61,7 +59,6 @@ class FilteredTodos with ChangeNotifier {
           .toList();
     }
 
-    _state = _state.copyWith(filteredTodos);
-    notifyListeners();
+    return FilteredTodosState(filteredTodos: filteredTodos);
   }
 }
