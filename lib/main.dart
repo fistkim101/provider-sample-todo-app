@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:provider/provider.dart';
 
-import 'enums/enums.dart';
 import 'providers/providers.dart';
 import 'screens/screens.dart';
 
@@ -16,34 +16,49 @@ class TodoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        StateNotifierProvider<SearchTerm, SearchTermState>(
           create: (_) => SearchTerm(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => Filter(initialFilterType: FilterType.all),
+        StateNotifierProvider<Filter, FilterState>(
+          create: (_) => Filter(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => Todos(initialTodos: []),
+        StateNotifierProvider<Todos, TodosState>(
+          create: (_) => Todos(),
         ),
-        ProxyProvider<Todos, ActiveTodoCount>(
-          update: (
-            _,
-            Todos todos,
-            __,
-          ) =>
-              ActiveTodoCount(todos: todos),
+        StateNotifierProvider<ActiveTodoCount, ActiveTodoCountState>(
+          create: (_) => ActiveTodoCount(),
         ),
-        ProxyProvider3<Todos, Filter, SearchTerm, FilteredTodos>(
-          update: (
-            _,
-            Todos todos,
-            Filter filter,
-            SearchTerm searchTerm,
-            __,
-          ) =>
-              FilteredTodos(
-                  todos: todos, filter: filter, searchTerm: searchTerm),
-        )
+        StateNotifierProvider<FilteredTodos, FilteredTodosState>(
+          create: (_) => FilteredTodos(),
+        ),
+        // ChangeNotifierProvider(
+        //   create: (_) => SearchTerm(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => Filter(initialFilterType: FilterType.all),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => Todos(initialTodos: []),
+        // ),
+        // ProxyProvider<Todos, ActiveTodoCount>(
+        //   update: (
+        //     _,
+        //     Todos todos,
+        //     __,
+        //   ) =>
+        //       ActiveTodoCount(todos: todos),
+        // ),
+        // ProxyProvider3<Todos, Filter, SearchTerm, FilteredTodos>(
+        //   update: (
+        //     _,
+        //     Todos todos,
+        //     Filter filter,
+        //     SearchTerm searchTerm,
+        //     __,
+        //   ) =>
+        //       FilteredTodos(
+        //           todos: todos, filter: filter, searchTerm: searchTerm),
+        // )
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -14,33 +14,35 @@ class Filters extends StatefulWidget {
 class _FiltersState extends State<Filters> {
   @override
   Widget build(BuildContext context) {
-    final Filter selectedFilter = context.read<Filter>();
+    final FilterType selectedFilterType =
+        context.read<FilterState>().filterType;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
-        _buildFilterButton(FilterType.all, selectedFilter),
-        _buildFilterButton(FilterType.active, selectedFilter),
-        _buildFilterButton(FilterType.completed, selectedFilter),
+        _buildFilterButton(context, FilterType.all, selectedFilterType),
+        _buildFilterButton(context, FilterType.active, selectedFilterType),
+        _buildFilterButton(context, FilterType.completed, selectedFilterType),
       ],
     );
   }
 
-  Widget _buildFilterButton(FilterType filterType, Filter filter) {
-    final FilterType currentFilterType = filter.state.filterType;
+  Widget _buildFilterButton(BuildContext context,
+      FilterType buildTargetFilterType, FilterType selectedFilterType) {
+    final Filter filter = context.read<Filter>();
 
     return TextButton(
       onPressed: () {
         setState(() {
-          filter.update(filterType);
+          filter.changeFilter(buildTargetFilterType);
         });
       },
       child: Text(
-        _getFilterName(filterType),
+        _getFilterName(buildTargetFilterType),
         style: TextStyle(
-          color: _isCurrentFilter(filterType, currentFilterType)
+          color: _isCurrentFilter(buildTargetFilterType, selectedFilterType)
               ? Colors.blue
               : Colors.grey,
           fontSize: 16,
@@ -49,8 +51,8 @@ class _FiltersState extends State<Filters> {
     );
   }
 
-  bool _isCurrentFilter(FilterType filterType, FilterType currentFilterType) =>
-      filterType == currentFilterType;
+  bool _isCurrentFilter(FilterType filterType, FilterType selectedFilterType) =>
+      filterType == selectedFilterType;
 
   String _getFilterName(FilterType filterType) {
     if (filterType == FilterType.all) {

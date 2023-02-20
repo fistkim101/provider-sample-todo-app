@@ -16,7 +16,8 @@ class SearchBox extends StatelessWidget {
         filled: true,
         prefixIcon: Icon(Icons.search),
       ),
-      onChanged: (searchTerm) => context.read<SearchTerm>().update(searchTerm),
+      onChanged: (searchTerm) =>
+          context.read<SearchTerm>().searchTermChange(searchTerm),
     );
   }
 }

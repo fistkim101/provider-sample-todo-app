@@ -5,6 +5,9 @@ import '../providers/providers.dart';
 
 class AddTodoTextField extends StatelessWidget {
   final TextEditingController _textEditingController = TextEditingController();
+
+  AddTodoTextField({super.key});
+
   @override
   Widget build(BuildContext context) {
     return TextField(

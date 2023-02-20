@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/model.dart';
 import '../providers/providers.dart';
 import '../widgets/widget.dart';
 
@@ -14,7 +15,8 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   @override
   Widget build(BuildContext context) {
-    final FilteredTodos allTodos = context.watch<FilteredTodos>();
+    final List<Todo> filteredTodos =
+        context.watch<FilteredTodosState>().filteredTodos;
 
     return ListView.separated(
       primary: false,
@@ -22,9 +24,8 @@ class _TodoListState extends State<TodoList> {
       separatorBuilder: (_, __) {
         return const Divider(color: Colors.grey);
       },
-      itemCount: allTodos.state.filteredTodos.length,
-      itemBuilder: (_, index) =>
-          TodoItem(todo: allTodos.state.filteredTodos[index]),
+      itemCount: filteredTodos.length,
+      itemBuilder: (_, index) => TodoItem(todo: filteredTodos[index]),
     );
   }
 }

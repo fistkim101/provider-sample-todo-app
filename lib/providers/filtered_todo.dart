@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:state_notifier/state_notifier.dart';
 
 import '../enums/enums.dart';
 import '../models/model.dart';
@@ -22,22 +23,17 @@ class FilteredTodosState extends Equatable {
   }
 }
 
-class FilteredTodos {
-  final Todos todos;
-  final Filter filter;
-  final SearchTerm searchTerm;
+class FilteredTodos extends StateNotifier<FilteredTodosState>
+    with LocatorMixin {
+  FilteredTodos() : super(const FilteredTodosState(filteredTodos: []));
 
-  FilteredTodos({
-    required this.todos,
-    required this.filter,
-    required this.searchTerm,
-  });
+  @override
+  void update(Locator watch) {
+    final FilterType selectedFilterType = watch<FilterState>().filterType;
+    final List<Todo> currentAllTodos = watch<TodosState>().todos;
+    final String currentSearchTerm = watch<SearchTermState>().searchTerm ?? '';
 
-  FilteredTodosState get state {
-    final FilterType selectedFilterType = filter.state.filterType;
-    List<Todo> currentAllTodos = todos.state.todos;
     List<Todo> filteredTodos = [];
-    String? currentSearchTerm = searchTerm.state.searchTerm;
 
     if (selectedFilterType == FilterType.all) {
       filteredTodos = currentAllTodos;
@@ -59,6 +55,48 @@ class FilteredTodos {
           .toList();
     }
 
-    return FilteredTodosState(filteredTodos: filteredTodos);
+    state = FilteredTodosState(filteredTodos: filteredTodos);
+    super.update(watch);
   }
 }
+
+// class FilteredTodos {
+//   final Todos todos;
+//   final Filter filter;
+//   final SearchTerm searchTerm;
+//
+//   FilteredTodos({
+//     required this.todos,
+//     required this.filter,
+//     required this.searchTerm,
+//   });
+//
+//   FilteredTodosState get state {
+//     final FilterType selectedFilterType = filter.state.filterType;
+//     List<Todo> currentAllTodos = todos.state.todos;
+//     List<Todo> filteredTodos = [];
+//     String? currentSearchTerm = searchTerm.state.searchTerm;
+//
+//     if (selectedFilterType == FilterType.all) {
+//       filteredTodos = currentAllTodos;
+//     }
+//
+//     if (selectedFilterType == FilterType.completed) {
+//       filteredTodos =
+//           currentAllTodos.where((todo) => todo.isCompleted).toList();
+//     }
+//
+//     if (selectedFilterType == FilterType.active) {
+//       filteredTodos =
+//           currentAllTodos.where((todo) => !todo.isCompleted).toList();
+//     }
+//
+//     if (currentSearchTerm != null && currentSearchTerm.isNotEmpty) {
+//       filteredTodos = filteredTodos
+//           .where((todo) => todo.description.contains(currentSearchTerm))
+//           .toList();
+//     }
+//
+//     return FilteredTodosState(filteredTodos: filteredTodos);
+//   }
+// }

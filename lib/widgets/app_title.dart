@@ -22,7 +22,7 @@ class AppTitle extends StatelessWidget {
           ),
         ),
         Text(
-          '${context.watch<ActiveTodoCount>().state.activeTodoCount} items left',
+          '${context.watch<ActiveTodoCountState>().activeTodoCount} items left',
           style: const TextStyle(
             fontSize: 16,
             color: Colors.red,

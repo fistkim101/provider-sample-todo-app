@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/providers.dart';
-import '../models/model.dart';
 import '../enums/enums.dart';
+import '../models/model.dart';
+import '../providers/providers.dart';
 
 class TodoItem extends StatefulWidget {
   final Todo todo;
@@ -20,14 +20,10 @@ class TodoItem extends StatefulWidget {
 class _TodoItemState extends State<TodoItem> {
   @override
   Widget build(BuildContext context) {
-    final Todos todos = context.read<Todos>();
-
     return Dismissible(
       key: ValueKey(widget.todo.id),
       onDismissed: (_) {
-        setState(() {
-          todos.removeTodo(widget.todo.id);
-        });
+        context.read<Todos>().removeTodo(widget.todo.id);
       },
       background: _buildDismissibleBackground(DirectionType.left),
       secondaryBackground: _buildDismissibleBackground(DirectionType.right),
@@ -57,7 +53,7 @@ class _TodoItemState extends State<TodoItem> {
         leading: Checkbox(
           onChanged: (isCompleted) {
             setState(() {
-              todos.toggleTodo(widget.todo.id);
+              context.read<Todos>().toggleTodo(widget.todo.id);
             });
           },
           value: widget.todo.isCompleted,

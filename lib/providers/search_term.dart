@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 
 class SearchTermState extends Equatable {
   final String? searchTerm;
@@ -19,20 +19,28 @@ class SearchTermState extends Equatable {
   }
 }
 
-class SearchTerm with ChangeNotifier {
-  late SearchTermState _state;
-  final String? initialSearchTerm;
+class SearchTerm extends StateNotifier<SearchTermState> {
+  SearchTerm() : super(const SearchTermState(searchTerm: ''));
 
-  SearchTermState get state => _state;
-
-  SearchTerm({
-    this.initialSearchTerm,
-  }) {
-    _state = SearchTermState(searchTerm: initialSearchTerm);
-  }
-
-  void update(String searchTerm) {
-    _state = _state.copyWith(searchTerm);
-    notifyListeners();
+  void searchTermChange(String searchTerm) {
+    state = SearchTermState(searchTerm: searchTerm);
   }
 }
+
+// class SearchTerm with ChangeNotifier {
+//   late SearchTermState _state;
+//   final String? initialSearchTerm;
+//
+//   SearchTermState get state => _state;
+//
+//   SearchTerm({
+//     this.initialSearchTerm,
+//   }) {
+//     _state = SearchTermState(searchTerm: initialSearchTerm);
+//   }
+//
+//   void update(String searchTerm) {
+//     _state = _state.copyWith(searchTerm);
+//     notifyListeners();
+//   }
+// }
